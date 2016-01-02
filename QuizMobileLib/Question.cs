@@ -6,13 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
+using System.Collections;
 
 namespace QuizMobileLib
 {
     /// <summary>
     /// An object to hold data about a question.
     /// </summary>
-    public class Question
+    public class Question : IEquatable<Question>
     {
         #region Properties  
         /// <summary>
@@ -91,10 +92,81 @@ namespace QuizMobileLib
         /// <param name="val">The string that represents the question.</param>
         /// <remarks>This is only provided for convenience, recommended that you instantiate the proper way.</remarks>
         public static implicit operator Question(string val) => new Question(val);
+
+        /// <summary>
+        /// Overrides the == operator to work with the type Question.
+        /// </summary>
+        /// <param name="lhs"></param>
+        /// <param name="rhs"></param>
+        /// <returns></returns>
+        public static bool operator ==(Question lhs, Question rhs) => lhs.Equals(rhs);
+
+        /// <summary>
+        /// Overrides the != operator to work with the type Question.
+        /// </summary>
+        /// <param name="lhs"></param>
+        /// <param name="rhs"></param>
+        /// <returns></returns>
+        public static bool operator !=(Question lhs, Question rhs) => !lhs.Equals(rhs);
+        #endregion
+
+        #region Interface Implementations
+        /// <summary>
+        /// Determines if this instance is equal to another.
+        /// </summary>
+        /// <param name="other">The instance to compare to.</param>
+        /// <returns>Whether or not the two instances have the same property values (i.e. if they are equal).</returns>
+        public bool Equals(Question other)
+        {
+            bool isTextEqual = other.Text == this.Text;
+            bool isImageURIEqual = other.ImageURI == this.ImageURI;
+            bool isCorrectAnswerEqual = other.CorrectAnswer == this.CorrectAnswer;
+            bool areAnswersEqual = other.Answers.Equals(this.Answers);
+
+            return isTextEqual && isImageURIEqual && isCorrectAnswerEqual && areAnswersEqual;
+        }
+        #endregion
+
+        #region Override Methods
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return base.ToString();
+        }
+
         #endregion
 
         #region Methods
-
+        /// <summary>
+        /// Determines whether the answer submitted by the user
+        /// is the correct answer to the question.
+        /// </summary>
+        /// <param name="userAnswer">The answer submitted by the user.</param>
+        /// <returns>Whether or not the user was correct.</returns>
+        public bool IsUserGuessCorrect(Answer userAnswer) => userAnswer == CorrectAnswer;
         #endregion
     }
 }

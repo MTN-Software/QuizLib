@@ -21,7 +21,7 @@ namespace QuizMobileLib
         /// <param name="answer">The string representation of the answer.</param>
         public Answer(string answer)
         {
-            Text = answer;   
+            Text = answer;
         }
         #endregion
 
@@ -42,6 +42,7 @@ namespace QuizMobileLib
             return Text.CompareTo(other.Text);
         }
         #endregion
+
         #region IEquatable<Answer>
         /// <summary>
         /// Determines if this instance contains the same value as the compared one.
@@ -54,6 +55,7 @@ namespace QuizMobileLib
         }
         #endregion
         #endregion
+
         #region Operators
         /// <summary>
         /// Allows you to instatiate an answer by just providing the string.
@@ -65,10 +67,7 @@ namespace QuizMobileLib
         /// Answer correct = "foobar";  // equivalent to Answer correct = new Answer("foobar");
         /// </code>
         /// </example>
-        public static implicit operator Answer(string val)
-        {
-            return new Answer(val);
-        }
+        public static implicit operator Answer(string val) => new Answer(val);
 
         /// <summary>
         /// Overrided "==" operator.
@@ -76,7 +75,7 @@ namespace QuizMobileLib
         /// <param name="lhs">Left hand side.</param>
         /// <param name="rhs">Right hand side.</param>
         /// <returns></returns>
-        public static bool operator ==(Answer lhs, Answer rhs) => lhs.Equals(rhs);
+        public static bool operator ==(Answer lhs, Answer rhs) => Equals(lhs,rhs);
 
         /// <summary>
         /// Overrided "!=" operator
@@ -84,7 +83,7 @@ namespace QuizMobileLib
         /// <param name="lhs">Left hand side.</param>
         /// <param name="rhs">Right hand side.</param>
         /// <returns></returns>
-        public static bool operator !=(Answer lhs, Answer rhs) => !lhs.Equals(rhs);
+        public static bool operator !=(Answer lhs, Answer rhs) => !Equals(lhs, rhs);
         #endregion
 
         #region Methods
@@ -100,13 +99,26 @@ namespace QuizMobileLib
                 return false;
             }
 
-            
+
             if (obj is Answer)
                 return Equals(obj as Answer);
             else
                 return false;
-            
+
         }
+
+        /// <summary>
+        /// Determines if two answers contain the same information.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool Equals(Answer a, Answer b)
+        {
+            if (a == null) return b == null;
+            return string.Equals(a.Text, b.Text, StringComparison.OrdinalIgnoreCase);
+        }
+
 
         /// <summary>
         /// Returns hash code for this instance.
