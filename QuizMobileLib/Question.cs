@@ -52,6 +52,10 @@ namespace QuizMobileLib
         /// <summary>
         /// Initialize a question.
         /// </summary>
+        /// <remarks>
+        /// Use of this constructor is discouraged b/c of the lack of
+        /// initializing a correct answer.
+        /// </remarks>
         /// <param name="text">The string that represents the question.</param>
         public Question(string text)
         {
@@ -118,10 +122,11 @@ namespace QuizMobileLib
         /// <returns>Whether or not the two instances have the same property values (i.e. if they are equal).</returns>
         public bool Equals(Question other)
         {
+            if (other == null) return false;
             bool isTextEqual = other.Text == this.Text;
             bool isImageURIEqual = other.ImageURI == this.ImageURI;
-            bool isCorrectAnswerEqual = other.CorrectAnswer == this.CorrectAnswer;
-            bool areAnswersEqual = other.Answers.Equals(this.Answers);
+            bool isCorrectAnswerEqual = Answer.Equals(CorrectAnswer, other.CorrectAnswer);
+            bool areAnswersEqual = Answers.SequenceEqual(other.Answers);
 
             return isTextEqual && isImageURIEqual && isCorrectAnswerEqual && areAnswersEqual;
         }
@@ -130,13 +135,13 @@ namespace QuizMobileLib
         #region Override Methods
         
         /// <summary>
-        /// 
+        /// Determines whether a specified object is equal to the current one.
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
         public override bool Equals(object obj)
         {
-            return base.Equals(obj);
+            return Equals(obj as Question);
         }
 
         /// <summary>
@@ -149,12 +154,12 @@ namespace QuizMobileLib
         }
 
         /// <summary>
-        /// 
+        /// Returns a string to represent the current object.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            return base.ToString();
+            return this.Text;
         }
 
         #endregion

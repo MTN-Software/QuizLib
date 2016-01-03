@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace QuizMobileLib
 {
@@ -45,6 +46,16 @@ namespace QuizMobileLib
         {
             questionList.AddRange(questionList);
         }
+
+        /// <summary>
+        /// Initializes a QuestionBank from reading through an
+        /// xml file.
+        /// </summary>
+        /// <param name="XmlQuizLayout">The XDocument containing the contents of the xml file.</param>
+        public QuestionBank(XDocument XmlQuizLayout)
+        {
+            this.questionList = new XmlQuestionParser(XmlQuizLayout).GetQuestions();
+        }
         #endregion
 
         #region Interface Implemenations
@@ -59,6 +70,11 @@ namespace QuizMobileLib
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Determines whether the specified objects are equal.
+        /// </summary>
+        /// <param name="obj">The object to compare.</param>
+        /// <returns></returns>
         public override bool Equals(object obj)
         {
             return Equals(this.questionList, obj as List<QuestionBank>);
@@ -74,6 +90,24 @@ namespace QuizMobileLib
                     return false;
             }
             return true;
+        }
+
+        /// <summary>
+        /// Gets the hashcode of the current object.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        /// <summary>
+        /// Adds a question to the list.
+        /// </summary>
+        /// <param name="question">The question to add.</param>
+        public void Add(Question question)
+        {
+            QuestionList.Add(question);
         }
         #endregion
 
@@ -98,8 +132,25 @@ namespace QuizMobileLib
             get { return questionList; }
             set
             {
-                if (questionList != value)
+                if (!questionList.Equals(value))
                     questionList = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets the Question at "index" of the QuestionList
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public Question this[int index]
+        {
+            get { return QuestionList[index]; }
+            set
+            {
+                if (questionList[index] != value)
+                {
+                    questionList[index] = value;
+                }
             }
         }
         #endregion
